@@ -1,10 +1,12 @@
 package ru.shift.userimporter.api.controller;
 
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.shift.userimporter.api.ApiPath;
 import ru.shift.userimporter.api.dto.DetailedFileStatistic;
 import ru.shift.userimporter.api.dto.FileIdResponse;
 import ru.shift.userimporter.api.dto.FileResponse;
@@ -17,7 +19,7 @@ import ru.shift.userimporter.core.service.FileProcessingService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping(ApiPath.files)
 @RequiredArgsConstructor
 public class FileController {
     private final FileUploadService fileUploadService;
@@ -32,13 +34,13 @@ public class FileController {
                 .body(new FileIdResponse(fileId));
     }
 
-    @PostMapping("/{fileId}/processing")
-    public ResponseEntity<Void> processFile(@PathVariable Long fileId) {
+    @PostMapping(ApiPath.fileId + ApiPath.processing)
+    public ResponseEntity<Void> processFile(@PathVariable @Positive Long fileId) {
         fileProcessingService.processFile(fileId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/statistics")
+    @GetMapping(ApiPath.statistics)
     public ResponseEntity<List<FileResponse>> getFilesStatistics(
             @RequestParam(required = false) FileStatus status) {
         List<FileResponse> statistics = fileStatisticService.getFilesByStatus(status)
@@ -48,9 +50,9 @@ public class FileController {
         return ResponseEntity.ok(statistics);
     }
 
-    @GetMapping("/{fileId}/statistics")
+    @GetMapping(ApiPath.fileId + ApiPath.statistics)
     public ResponseEntity<DetailedFileStatistic> getDetailedStatistics(
-            @PathVariable Long fileId) {
+            @PathVariable @Positive Long fileId) {
         DetailedFileStatistic statistic = fileMapper.toDetailedFileStatistic(
                 fileStatisticService.getFileById(fileId),
                 fileProcessingService.getProcessingErrors(fileId)
