@@ -34,7 +34,7 @@ public class CsvParser {
             String phone = parts[4].trim();
             String birthDateStr = parts[5].trim();
 
-            LocalDate.parse(birthDateStr, DATE_FORMATTER); // проверка формата
+            LocalDate.parse(birthDateStr, DATE_FORMATTER);
 
             UserCsvRow row = new UserCsvRow(firstName, lastName, middleName, email, phone, birthDateStr);
             return new ParseResult(List.of(row), List.of());

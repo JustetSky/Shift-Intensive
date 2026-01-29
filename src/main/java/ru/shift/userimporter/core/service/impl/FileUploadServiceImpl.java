@@ -72,18 +72,15 @@ public class FileUploadServiceImpl implements FileUploadService {
     
     private boolean isFileEmpty(MultipartFile file) {
         try {
-            // Проверка размера файла
             if (file == null || file.isEmpty() || file.getSize() == 0) {
                 return true;
             }
 
-            // Проверка содержимого файла
             byte[] bytes = file.getBytes();
             if (bytes == null || bytes.length == 0) {
                 return true;
             }
 
-            // Проверка на файлы только с BOM или пробелами
             String content = new String(bytes, StandardCharsets.UTF_8)
                     .replace("\uFEFF", "")
                     .trim();
