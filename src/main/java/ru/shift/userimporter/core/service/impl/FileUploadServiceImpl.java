@@ -9,7 +9,7 @@ import ru.shift.userimporter.core.model.FileErrorCode;
 import ru.shift.userimporter.core.model.FileStatus;
 import ru.shift.userimporter.core.model.UploadedFile;
 import ru.shift.userimporter.core.repository.UploadedFileRepository;
-import ru.shift.userimporter.core.service.FileService;
+import ru.shift.userimporter.core.service.FileUploadService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class FileServiceImpl implements FileService {
+public class FileUploadServiceImpl implements FileUploadService {
     private final UploadedFileRepository uploadedFileRepository;
     private final Path storageLocation = Paths.get("./uploads");
 
