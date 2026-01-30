@@ -3,7 +3,6 @@ package ru.shift.userimporter.api.controller;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.shift.userimporter.api.ApiPath;
@@ -28,36 +27,32 @@ public class FileController {
     private final FileMapper fileMapper;
 
     @PostMapping
-    public ResponseEntity<FileIdResponse> uploadFile(@RequestParam("file") MultipartFile file) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public FileIdResponse uploadFile(@RequestParam("file") MultipartFile file) {
         Long fileId = fileUploadService.uploadFile(file);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new FileIdResponse(fileId));
+        return new FileIdResponse(fileId);
     }
 
     @PostMapping(ApiPath.FILE_ID + ApiPath.PROCESSING)
-    public ResponseEntity<Void> processFile(@PathVariable @Positive Long fileId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void processFile(@PathVariable @Positive Long fileId) {
         fileProcessingService.processFile(fileId);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(ApiPath.STATISTICS)
-    public ResponseEntity<List<FileResponse>> getFilesStatistics(
-            @RequestParam(required = false) FileStatus status) {
-        List<FileResponse> statistics = fileStatisticService.getFilesByStatus(status)
+    public List<FileResponse> getFilesStatistics(@RequestParam(required = false) FileStatus status) {
+        return fileStatisticService.getFilesByStatus(status)
                 .stream()
                 .map(fileMapper::toFileResponse)
                 .toList();
-        return ResponseEntity.ok(statistics);
     }
 
     @GetMapping(ApiPath.FILE_ID + ApiPath.STATISTICS)
-    public ResponseEntity<DetailedFileStatistic> getDetailedStatistics(
-            @PathVariable @Positive Long fileId) {
-        DetailedFileStatistic statistic = fileMapper.toDetailedFileStatistic(
+    public DetailedFileStatistic getDetailedStatistics( @PathVariable @Positive Long fileId) {
+        return fileMapper.toDetailedFileStatistic(
                 fileStatisticService.getFileById(fileId),
                 fileProcessingService.getProcessingErrors(fileId)
         );
-        return ResponseEntity.ok(statistic);
     }
 
 }
