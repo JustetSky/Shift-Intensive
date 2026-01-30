@@ -54,16 +54,17 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
             
             Files.copy(file.getInputStream(), filePath);
+
+            return uploadedFileRepository.save(
+                    UploadedFile.builder()
+                        .originalFilename(originalFilename)
+                        .storagePath(filePath.toString())
+                        .fileStatus(FileStatus.NEW)
+                        .insertedRows(0)
+                        .updatedRows(0)
+                        .build()
+            ).getId();
             
-
-            UploadedFile uploadedFile = new UploadedFile();
-            uploadedFile.setOriginalFilename(originalFilename);
-            uploadedFile.setStoragePath(filePath.toString());
-            uploadedFile.setFileStatus(FileStatus.NEW);
-            uploadedFile.setInsertedRows(0);
-            uploadedFile.setUpdatedRows(0);
-
-            return uploadedFileRepository.save(uploadedFile).getId();
         } catch (IOException e) {
             throw new ServiceException(FileErrorCode.FILE_STORAGE_ERROR,
                     "Failed to store file", e);

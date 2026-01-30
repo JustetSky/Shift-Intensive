@@ -38,19 +38,16 @@ public class UserLineProcessor {
             }
 
             Optional<User> existingUser = userRepository.findUserByPhone(row.phone());
-            User user = existingUser.orElseGet(User::new);
-
-            user.setFirstName(row.firstName());
-            user.setLastName(row.lastName());
-            user.setMiddleName(row.middleName());
-            user.setEmail(row.email());
-            user.setPhone(row.phone());
-            user.setBirthDate(LocalDate.parse(row.birthDate()));
-
-            user.setUpdatedAt(OffsetDateTime.now());
-            if (existingUser.isEmpty()) {
-                user.setCreatedAt(user.getUpdatedAt());
-            }
+            User user = existingUser.orElse(User.builder()
+                    .firstName(row.firstName())
+                    .lastName(row.lastName())
+                    .middleName(row.middleName())
+                    .email(row.email())
+                    .phone(row.phone())
+                    .birthDate(LocalDate.parse(row.birthDate()))
+                    .updatedAt(OffsetDateTime.now())
+                    .createdAt(existingUser.isEmpty() ? OffsetDateTime.now() : null)
+                    .build());
 
             userRepository.save(user);
 

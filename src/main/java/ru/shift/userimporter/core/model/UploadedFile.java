@@ -1,13 +1,15 @@
 package ru.shift.userimporter.core.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "uploaded_files")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UploadedFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

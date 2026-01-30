@@ -17,14 +17,12 @@ import ru.shift.userimporter.core.service.UserLineProcessor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FileProcessingServiceImpl implements FileProcessingService {
-
-    private final UploadedFileRepository uploadedFileRepository;
+    
     private final FileProcessingErrorRepository errorRepository;
     private final UserLineProcessor lineProcessor;
     private final FileStatusUpdater fileStatusUpdater;
@@ -44,8 +42,8 @@ public class FileProcessingServiceImpl implements FileProcessingService {
             fileStatusUpdater.updateWithStatistics(
                     fileId,
                     FileStatus.DONE,
-                    statistics.getInsertedRows(),
-                    statistics.getUpdatedRows()
+                    statistics.insertedRows(),
+                    statistics.updatedRows()
             );
 
         } catch (Exception e) {
@@ -100,20 +98,9 @@ public class FileProcessingServiceImpl implements FileProcessingService {
                         entity.getErrorCode().name(),
                         entity.getErrorMessage()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
-
-    private static class FileProcessingStatistics {
-        private final int insertedRows;
-        private final int updatedRows;
-
-        public FileProcessingStatistics(int insertedRows, int updatedRows) {
-            this.insertedRows = insertedRows;
-            this.updatedRows = updatedRows;
-        }
-
-        public int getInsertedRows() { return insertedRows; }
-        public int getUpdatedRows() { return updatedRows; }
+    private record FileProcessingStatistics(int insertedRows, int updatedRows) {
     }
 }
