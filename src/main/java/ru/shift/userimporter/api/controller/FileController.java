@@ -19,7 +19,7 @@ import ru.shift.userimporter.core.service.FileProcessingService;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiPath.files)
+@RequestMapping(ApiPath.FILES)
 @RequiredArgsConstructor
 public class FileController {
     private final FileUploadService fileUploadService;
@@ -34,13 +34,13 @@ public class FileController {
                 .body(new FileIdResponse(fileId));
     }
 
-    @PostMapping(ApiPath.fileId + ApiPath.processing)
+    @PostMapping(ApiPath.FILE_ID + ApiPath.PROCESSING)
     public ResponseEntity<Void> processFile(@PathVariable @Positive Long fileId) {
         fileProcessingService.processFile(fileId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(ApiPath.statistics)
+    @GetMapping(ApiPath.STATISTICS)
     public ResponseEntity<List<FileResponse>> getFilesStatistics(
             @RequestParam(required = false) FileStatus status) {
         List<FileResponse> statistics = fileStatisticService.getFilesByStatus(status)
@@ -50,7 +50,7 @@ public class FileController {
         return ResponseEntity.ok(statistics);
     }
 
-    @GetMapping(ApiPath.fileId + ApiPath.statistics)
+    @GetMapping(ApiPath.FILE_ID + ApiPath.STATISTICS)
     public ResponseEntity<DetailedFileStatistic> getDetailedStatistics(
             @PathVariable @Positive Long fileId) {
         DetailedFileStatistic statistic = fileMapper.toDetailedFileStatistic(

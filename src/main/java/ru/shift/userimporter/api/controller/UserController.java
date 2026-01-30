@@ -16,7 +16,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping(ApiPath.clients)
+@RequestMapping(ApiPath.CLIENTS)
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
