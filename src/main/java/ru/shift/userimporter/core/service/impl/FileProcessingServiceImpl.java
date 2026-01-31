@@ -9,7 +9,6 @@ import ru.shift.userimporter.api.dto.ProcessingError;
 import ru.shift.userimporter.core.exception.ServiceException;
 import ru.shift.userimporter.core.model.*;
 import ru.shift.userimporter.core.repository.FileProcessingErrorRepository;
-import ru.shift.userimporter.core.repository.UploadedFileRepository;
 import ru.shift.userimporter.core.service.FileProcessingService;
 import ru.shift.userimporter.core.service.FileStatusUpdater;
 import ru.shift.userimporter.core.service.UserLineProcessor;

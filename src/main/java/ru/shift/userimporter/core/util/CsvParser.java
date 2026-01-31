@@ -2,7 +2,6 @@ package ru.shift.userimporter.core.util;
 
 import ru.shift.userimporter.api.dto.ProcessingError;
 import ru.shift.userimporter.api.dto.UserCsvRow;
-import ru.shift.userimporter.core.exception.ServiceException;
 import ru.shift.userimporter.core.model.ProcessingErrorCode;
 
 import java.time.LocalDate;
